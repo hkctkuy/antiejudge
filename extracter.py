@@ -46,8 +46,10 @@ parser = argparse.ArgumentParser(
         └── {REL_INPUTS_PATH}
             ├── test1
             └── test2
+
         NOTE: input and answer for one test is the same
-        Written by Ilya "hkctkuy" Yegorov
+
+        Written by Ilya "hkctkuy" Yegorov, 2024
     '''),
     formatter_class=CustomFormatter
 )

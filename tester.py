@@ -40,6 +40,9 @@ parser = argparse.ArgumentParser(
         Test given python program
     '''),
     epilog=textwrap.dedent(f'''
+        Use stdin mode for program getting input from stdin
+        Use snippet mode for testing functions, classes and others
+
         Each test dir tree:
         tests
         ├── {REL_ANSWERS_PATH}
@@ -48,11 +51,13 @@ parser = argparse.ArgumentParser(
         └── {REL_INPUTS_PATH}
             ├── test1
             └── test2
+
         NOTE: input and answer for one test should be the same
 
-        Use stdin mode for program getting input from stdin
-        Use snippet mode for testing functions, classes and others
-        Made by Ilya "hkctkuy" Yegorov
+        NOTE: for python target use shebang (#!/bin/env python3 or etc)
+        Read more: https://en.wikipedia.org/wiki/Shebang_(Unix)
+
+        Written by Ilya "hkctkuy" Yegorov, 2024
     '''),
     formatter_class=CustomFormatter
 )
@@ -70,7 +75,7 @@ parser.add_argument(
     help='Paths to dirs with tests'
 )
 parser.add_argument(
-    '--abort-on-error', dest='abort',
+    '--abort-on-fail', dest='abort',
     action=argparse.BooleanOptionalAction,
     default=True,
     help='''
@@ -112,17 +117,16 @@ def append(src, dest):
 
 
 def run_test(target, inp, ans, mode, timeout):
-    runner = target
     stdin = inp
     if mode == Mode.Snippet:
         shutil.copy(target, SNIP_RUNNER)
         append(inp, SNIP_RUNNER)
-        runner = SNIP_RUNNER
+        target = SNIP_RUNNER
         stdin = None
     else:
         stdin = open(inp, 'r')
 
-    cmd = ['python3', runner]
+    cmd = os.path.join('.', target)
     try:
         with open(OUT, 'w+') as out:
             subprocess.run(cmd, stdin=stdin, stdout=out, timeout=timeout)

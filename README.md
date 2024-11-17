@@ -5,6 +5,6 @@ Parse tests from `raw` text file:
 
 	$ ./extracter.py raw
 
-Run the resulting tests for your solution `prog.py`:
+Run the resulting tests for your solution `target`:
 
-    $ ./tester.py prog.py stdin
+    $ ./tester.py target stdin
