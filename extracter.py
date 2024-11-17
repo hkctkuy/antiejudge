@@ -54,7 +54,7 @@ parser = argparse.ArgumentParser(
     formatter_class=CustomFormatter
 )
 parser.add_argument(
-    'raw',
+    'raw', default='raw', type=argparse.FileType(),
     help='Target file from which need to extract tests'
 )
 parser.add_argument(
@@ -68,14 +68,6 @@ parser.add_argument(
 
 
 def main(args):
-    raw = args.raw
-    if (
-        not os.path.exists(raw)
-        or not os.path.isfile(raw)
-    ):
-        print('Invalid raw test file:', raw, file=sys.stderr)
-        sys.exit(1)
-
     out = args.out
     inputs = os.path.join(out, REL_INPUTS_PATH)
     answers = os.path.join(out, REL_ANSWERS_PATH)
@@ -90,9 +82,7 @@ def main(args):
     os.makedirs(inputs)
     os.makedirs(answers)
 
-    content = None
-    with open(raw, 'r') as f:
-        content = f.read()
+    content = args.raw.read()
 
     for m in regex.finditer(content):
         name = BASENAME + m['number']
