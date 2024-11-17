@@ -37,7 +37,7 @@ class CustomFormatter(
 
 parser = argparse.ArgumentParser(
     description=textwrap.dedent('''
-        Test given python program
+        Test given program
     '''),
     epilog=textwrap.dedent(f'''
         Use stdin mode for program getting input from stdin
@@ -63,7 +63,7 @@ parser = argparse.ArgumentParser(
 )
 parser.add_argument(
     'target',
-    help='Tested python program path'
+    help='Tested program path'
 )
 parser.add_argument(
     'mode', type=Mode, choices=Mode,
@@ -133,6 +133,9 @@ def run_test(target, inp, ans, mode, timeout):
     except subprocess.TimeoutExpired:
         print('TIMEOUT!', file=sys.stderr)
         return False
+    finally:
+        if mode == Mode.Stdin:
+            stdin.close()
     return filecmp.cmp(OUT, ans, shallow=False)
 
 

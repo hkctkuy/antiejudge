@@ -32,10 +32,10 @@
     usage: tester.py [-h] [--tests DIR [DIR ...]] [--abort-on-fail | --no-abort-on-fail] [-t SEC]
                      target {stdin,snippet}
 
-    Test given python program
+    Test given program
 
     positional arguments:
-      target                               Tested python program path
+      target                               Tested program path
       {stdin,snippet}                      Test mode
 
     options:
