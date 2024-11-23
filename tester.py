@@ -19,6 +19,7 @@ REL_ANSWERS_PATH = 'answers'
 SNIP_RUNNER = 'tmp_snippet_runner.py'
 OUT = 'tmp_out.out'
 
+DEFAULT_TESTS = 'tests'
 
 class Mode(StrEnum):
     Stdin = 'stdin'
@@ -71,8 +72,12 @@ parser.add_argument(
 )
 parser.add_argument(
     '--tests', dest='dirs', metavar='DIR',
-    action='extend', nargs='+', default=['tests'],
-    help='Paths to dirs with tests'
+    action='extend', nargs='+',
+    help=f'''
+        Paths to dirs with tests.
+        If no directory is specified,
+        the path `{DEFAULT_TESTS}` is used
+    '''
 )
 parser.add_argument(
     '--abort-on-fail', dest='abort',
@@ -148,7 +153,7 @@ def cleanup():
 
 
 def main(args):
-    dirs = set(args.dirs)
+    dirs = set(args.dirs) if args.dirs else [DEFAULT_TESTS]
     for test_dir in dirs:
         inputs, answers = extract(test_dir)
         if not inputs or not answers:
